@@ -1,0 +1,60 @@
+# Which adapter module under adapters/ to use.
+adapter: chatgpt
+
+# persistent = one signed-in profile reused for the whole run. This is the
+#   authenticated, personalized arm: the account and its accumulated
+#   history are the treatment.
+# ephemeral  = a throwaway profile per query, no cookies or history
+#   carried over. This is the clean-slate arm.
+isolation: persistent
+
+# Sign in automatically when no valid session is found, instead of
+# requiring an interactive --login. Credentials come from the environment
+# (LLM_EMAIL, LLM_PASSWORD, and LLM_TOTP_SECRET if 2FA is on), seeded
+# from credentials_file if it exists. Never put them in this file.
+auto_login: true
+credentials_file: credentials.env
+
+# Use the interface's temporary/incognito chat mode, which excludes the
+# exchange from history and memory. Leave false for the personalized arm,
+# where memory is precisely what you are measuring.
+temporary_chat: false
+
+# Abort the run unless the exit IP geolocates here (ISO 3166-1 alpha-2).
+expected_country: SE
+
+# Browser locale and timezone. Match these to the exit IP: set them to
+# your own location when testing locally, and to Stockholm on the VPS.
+browser_locale: en-US
+browser_timezone: Europe/Berlin
+
+# Set false only while debugging; a run that proceeds from the wrong
+# country produces data you cannot trust.
+enforce_geo: false
+
+prompts_file: prompts.txt
+output_dir: runs
+profile_dir: browser-profile
+
+# How many times each prompt is asked per run. Model output is
+# stochastic; a single sample per prompt is not interpretable.
+repeats: 1
+
+# Randomise prompt order within a run so position effects do not
+# align with prompt identity.
+shuffle: true
+
+# Seconds to wait between prompts, drawn uniformly from this range.
+min_delay_seconds: 25
+max_delay_seconds: 90
+
+# Headful under Xvfb on the server. Headless is detected far more often.
+headless: false
+viewport_width: 1440
+viewport_height: 900
+
+# Seconds to wait for a response to finish streaming before giving up.
+response_timeout: 180
+
+# Optional: POST a JSON summary here when a run fails. Leave blank to skip.
+failure_webhook: ""
